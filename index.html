@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard KINTO</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00708d">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -16,17 +15,17 @@
 
         /* KINTO - DARK MODE (por defecto) */
         :root {
-            --bg: #000000;
-            --bg2: #00708d;
-            --card: #00708d;
-            --text: #a6cdd7;
+            --bg: #002732;
+            --bg2: #00495c;
+            --card: #00495c;
+            --text: #ebf4f6;
             --text-secondary: #a6cdd7;
             --muted: rgba(166, 205, 215, 0.7);
-            --border: rgba(0, 112, 141, 0.3);
+            --border: rgba(89, 162, 181, 0.3);
             --primary: #000000;
-            --primary-2: #a6cdd7;
-            --accent: #a6cdd7;
-            --success: #00708d;
+            --primary-2: #59a2b5;
+            --accent: #ebf4f6;
+            --success: #59a2b5;
             --warning: #a6cdd7;
             --danger: #00708d;
             --shadow: 0 20px 50px rgba(0, 7, 141, 0.3);
@@ -34,56 +33,56 @@
 
         /* KINTO - LIGHT MODE */
         [data-theme="kinto-light"] {
-            --bg: #a6cdd7;
+            --bg: #ebf4f6;
             --bg2: #a6cdd7;
             --card: #a6cdd7;
-            --text: #000000;
-            --text-secondary: #00708d;
-            --muted: rgba(0, 0, 0, 0.7);
-            --border: rgba(0, 0, 0, 0.2);
-            --primary: #a6cdd7;
+            --text: #002732;
+            --text-secondary: #00495c;
+            --muted: rgba(0, 39, 50, 0.7);
+            --border: rgba(0, 39, 50, 0.2);
+            --primary: #ebf4f6;
             --primary-2: #a6cdd7;
-            --accent: #000000;
+            --accent: #002732;
             --success: #00708d;
-            --warning: #00708d;
+            --warning: #00495c;
             --danger: #00708d;
             --shadow: 0 10px 30px rgba(0, 7, 141, 0.15);
         }
 
         /* KINTO - DARK MODE */
         [data-theme="kinto-dark"] {
-            --bg: #000000;
-            --bg2: #00708d;
-            --card: #00708d;
-            --text: #a6cdd7;
+            --bg: #002732;
+            --bg2: #00495c;
+            --card: #00495c;
+            --text: #ebf4f6;
             --text-secondary: #a6cdd7;
             --muted: rgba(166, 205, 215, 0.7);
-            --border: rgba(0, 112, 141, 0.3);
-            --primary: #000000;
-            --primary-2: #a6cdd7;
-            --accent: #a6cdd7;
-            --success: #00708d;
+            --border: rgba(89, 162, 181, 0.3);
+            --primary: #00708d;
+            --primary-2: #00495c;
+            --accent: #ebf4f6;
+            --success: #59a2b5;
             --warning: #a6cdd7;
             --danger: #00708d;
-            --shadow: 0 20px 50px rgba(0, 7, 141, 0.3);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
         }
 
         /* KINTO - LIGHT MODE */
         [data-theme="kinto-light"] {
-            --bg: #a6cdd7;
+            --bg: #ebf4f6;
             --bg2: #a6cdd7;
-            --card: #a6cdd7;
-            --text: #000000;
-            --text-secondary: #00708d;
-            --muted: rgba(0, 0, 0, 0.7);
-            --border: rgba(0, 0, 0, 0.2);
-            --primary: #a6cdd7;
-            --primary-2: #a6cdd7;
-            --accent: #000000;
-            --success: #00708d;
-            --warning: #00708d;
-            --danger: #00708d;
-            --shadow: 0 10px 30px rgba(0, 7, 141, 0.15);
+            --card: #d4d7d9;
+            --text: #002732;
+            --text-secondary: #38434b;
+            --muted: rgba(56, 67, 75, 0.7);
+            --border: rgba(0, 39, 50, 0.2);
+            --primary: #00808d;
+            --primary-2: #59a2b5;
+            --accent: #ebf4f6;
+            --success: #00808d;
+            --warning: #00495c;
+            --danger: #59646d;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -97,7 +96,7 @@
         }
 
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: var(--bg);
             min-height: 100vh;
             padding: 16px 10px;
