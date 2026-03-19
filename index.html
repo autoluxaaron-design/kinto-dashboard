@@ -1265,7 +1265,11 @@
                 }
             });
 
-            return preparationData.sort((a, b) => a.prepTime.totalMs - b.prepTime.totalMs);
+            return preparationData.sort((a, b) => {
+                const timeA = a.nextBooking.pickupDate ? a.nextBooking.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                const timeB = b.nextBooking.pickupDate ? b.nextBooking.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                return timeA - timeB;
+            });
         }
 
         function createPrepCard(data) {
