@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard KINTO</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00708d">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* ============================================
+           SISTEMA DE TEMAS PROFESIONAL (4 VARIANTES)
+           ============================================ */
+
+        /* KINTO - DARK MODE (por defecto) */
+        :root {
+            --bg: #002732;
+            --bg2: #00495c;
+            --card: #00495c;
+            --text: #ebf4f6;
+            --text-secondary: #a6cdd7;
+            --muted: rgba(166, 205, 215, 0.7);
+            --border: rgba(89, 162, 181, 0.3);
+            --primary: #000000;
+            --primary-2: #59a2b5;
+            --accent: #ebf4f6;
+            --success: #59a2b5;
+            --warning: #a6cdd7;
+            --danger: #00708d;
+            --shadow: 0 20px 50px rgba(0, 7, 141, 0.3);
+        }
+
+        /* KINTO - LIGHT MODE */
+        [data-theme="kinto-light"] {
+            --bg: #ebf4f6;
+            --bg2: #a6cdd7;
+            --card: #a6cdd7;
+            --text: #002732;
+            --text-secondary: #00495c;
+            --muted: rgba(0, 39, 50, 0.7);
+            --border: rgba(0, 39, 50, 0.2);
+            --primary: #ebf4f6;
+            --primary-2: #a6cdd7;
+            --accent: #002732;
+            --success: #00708d;
+            --warning: #00495c;
+            --danger: #00708d;
+            --shadow: 0 10px 30px rgba(0, 7, 141, 0.15);
+        }
+
+        /* KINTO - DARK MODE */
+        [data-theme="kinto-dark"] {
+            --bg: #002732;
+            --bg2: #00495c;
+            --card: #00495c;
+            --text: #ebf4f6;
+            --text-secondary: #a6cdd7;
+            --muted: rgba(166, 205, 215, 0.7);
+            --border: rgba(89, 162, 181, 0.3);
+            --primary: #00708d;
+            --primary-2: #00495c;
+            --accent: #ebf4f6;
+            --success: #59a2b5;
+            --warning: #a6cdd7;
+            --danger: #00708d;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        /* KINTO - LIGHT MODE */
+        [data-theme="kinto-light"] {
+            --bg: #ebf4f6;
+            --bg2: #a6cdd7;
+            --card: #d4d7d9;
+            --text: #002732;
+            --text-secondary: #38434b;
+            --muted: rgba(56, 67, 75, 0.7);
+            --border: rgba(0, 39, 50, 0.2);
+            --primary: #00808d;
+            --primary-2: #59a2b5;
+            --accent: #ebf4f6;
+            --success: #00808d;
+            --warning: #00495c;
+            --danger: #59646d;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 16px 10px;
+            color: var(--text);
+            transition: background 0.35s, color 0.35s;
+        }
+
+        .container {
+            max-width: 1480px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           HEADER Y CONTROLES
+           ============================================ */
+        header {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .header-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 6px;
+            background: transparent;
+            padding: 0;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .theme-btn {
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            transition: all 0.2s;
+            white-space: nowrap;
+            min-width: auto;
+            height: 44px;
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: var(--primary);
+            color: var(--accent);
+            box-shadow: 0 3px 10px rgba(0, 112, 141, 0.3);
+        }
+
+        .brand-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 999px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ============================================
+           FILTROS
+           ============================================ */
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text);
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px;
+            background: var(--primary-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 112, 141, 0.15);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .reset-filters,
+        .refresh-data {
+            padding: 10px 16px;
+            background: var(--primary);
+            color: var(--accent);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+            transition: all 0.2s;
+        }
+
+        .reset-filters:hover,
+        .refresh-data:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 112, 141, 0.25);
+        }
+
+        /* ============================================
+           BARRA DE ESTADO
+           ============================================ */
+        .status-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .status-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-desc {
+            font-style: italic;
+            font-size: 0.6rem;
+            color: var(--muted);
+            text-align: center;
+            width: 100%;
+        }
+
+        .status-item.active {
+            background: var(--primary);
+            color: var(--accent);
+            border-color: var(--primary);
+        }
+
+        .status-item.active .status-desc {
+            color: var(--accent);
+        }
+
+        .status-item.active strong {
+            color: var(--accent);
+        }
+
+        .status-item strong {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid currentColor;
+        }
+
+        /* ============================================
+           RESULTADO Y CONTADORES
+           ============================================ */
+        .result-count {
+            padding: 10px 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin: 16px 0 12px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ============================================
+           SECCIÓN DE VEHÍCULOS EN PREPARACIÓN
+           ============================================ */
+        .vehicles-preparation {
+            margin-bottom: 26px;
+        }
+
+        .prep-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .prep-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.25s;
+        }
+
+        .prep-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .prep-card.critical {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .prep-card.warning {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .prep-card.ok {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .prep-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .prep-vehicle-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .prep-status-badge {
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .prep-status-critical {
+            background: #ef4444;
+            color: white;
+        }
+
+        .prep-status-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .prep-status-ok {
+            background: #10b981;
+            color: white;
+        }
+
+        .prep-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .prep-info-row {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+        }
+
+        .prep-info-row strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .prep-time-countdown {
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-align: center;
+            border: 1px solid var(--primary);
+        }
+
+        /* ============================================
+           GRID DE RESERVAS
+           ============================================ */
+        .bookings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .booking-card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.25s;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .booking-card.date-invalid {
+            border-left: 5px solid #ef4444;
+            opacity: 0.85;
+        }
+
+        .booking-card.lugar-salta {
+            border-left: 5px solid #3b82f6;
+        }
+
+        .booking-card.lugar-aeropuerto {
+            border-left: 5px solid #10b981;
+        }
+
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+            flex: 1;
+        }
+
+        .card-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            background: rgba(0, 112, 141, 0.15);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .card-location.salta {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .weekend-indicator {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #00808d;
+            background: rgba(0, 128, 141, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+            display: inline-block;
+        }
+
+        .card-body {
+            padding: 14px 16px 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .booking-detail {
+            font-size: 0.85rem;
+        }
+
+        .booking-detail-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 2px;
+        }
+
+        .booking-detail-value {
+            color: var(--text-secondary);
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .booking-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(166, 205, 215, 0.2);
+        }
+
+        .booking-detail-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .booking-detail-row-label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.8rem;
+            flex: 1;
+        }
+
+        .status-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: default;
+            gap: 4px;
+            min-width: 90px;
+            justify-content: center;
+        }
+
+        .status-button-icon {
+            font-size: 1rem;
+        }
+
+        .status-button-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 3px;
+        }
+
+        .status-button-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+        }
+
+        .status-button-value {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-button.current {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .status-button.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .status-button.new {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .booking-detail-row-value {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: right;
+            min-width: 100px;
+        }
+
+        .period {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: right;
+            padding: 4px 0;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            justify-content: center;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            width: 100%;
+            text-transform: uppercase;
+        }
+
+        .status-current {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .status-new {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .status-unknown {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+        }
+
+        .date-invalid-indicator {
+            padding: 5px 8px;
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ============================================
+           SECCIÓN DE GRÁFICOS
+           ============================================ */
+        .analytics-section {
+            margin-bottom: 26px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .chart-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        /* ============================================
+           EMPTY STATE
+           ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3.5rem;
+            margin-bottom: 14px;
+        }
+
+        .empty-state h2 {
+            color: var(--text);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* ============================================
+           FOOTER Y LOADING
+           ============================================ */
+        footer {
+            text-align: center;
+            color: var(--muted);
+            margin-top: 30px;
+            padding: 16px 0;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text);
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(0, 112, 141, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            }
+
+            .theme-switcher {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .theme-btn {
+                flex: 1;
+                width: 100%;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .reset-filters,
+            .refresh-data {
+                width: 100%;
+            }
+
+            .status-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bookings-grid,
+            .prep-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-controls {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div>
+                    <h1>📊 Dashboard KINTO</h1>
+                </div>
+                <div class="header-controls">
+                    <div class="theme-switcher">
+                        <button class="theme-btn active" id="themeToggleBtn" data-theme="kinto-dark" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de estado -->
+            <div class="status-bar">
+                <div class="status-item" onclick="setIndicatorFilter('vigentes')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #ef4444;"></span>
+                        <strong id="pickupCurrentCount">0</strong> Vigentes
+                    </div>
+                    <div class="status-desc">En curso</div>
+                </div>
+                <div class="status-item" onclick="setIndicatorFilter('pendientes')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #f59e0b;"></span>
+                        <strong id="pickupPendingCount">0</strong> Pendientes
+                    </div>
+                    <div class="status-desc">Pick-ups en 48h</div>
+                </div>
+                <div class="status-item" onclick="setIndicatorFilter('criticos')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #ef4444;"></span>
+                        <strong id="criticalCount">0</strong> Casos críticos
+                    </div>
+                    <div class="status-desc">Inválidas/vencidas</div>
+                </div>
+                <div class="status-item" onclick="setIndicatorFilter('devoluciones')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #10b981;"></span>
+                        <strong id="dropoffCurrentCount">0</strong> Devoluciones
+                    </div>
+                    <div class="status-desc">Drop-offs en 48h</div>
+                </div>
+                <div class="status-item" onclick="setIndicatorFilter('pickups')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #00495c;"></span>
+                        <strong id="upcomingPickupsCount">0</strong> Pick Up
+                    </div>
+                    <div class="status-desc">Pick-ups en 7d</div>
+                </div>
+                <div class="status-item" onclick="setIndicatorFilter('dropoffs')">
+                    <div class="status-main">
+                        <span class="status-indicator" style="background: #10b981;"></span>
+                        <strong id="upcomingDropoffsCount">0</strong> Drop Off
+                    </div>
+                    <div class="status-desc">Drop-offs en 7d</div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filterLugar">📍 Lugar (Pick-up)</label>
+                    <select id="filterLugar">
+                        <option value="">Todos</option>
+                        <option value="Salta">Salta</option>
+                        <option value="Aeropuerto">Aeropuerto</option>
+                        <option value="Jujuy">Jujuy</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterVehicle">🚙 Vehículo</label>
+                    <select id="filterVehicle">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterPickupStatus">📌 Estado Pick-up</label>
+                    <select id="filterPickupStatus">
+                        <option value="">Todos</option>
+                        <option value="current">Actual</option>
+                        <option value="pending">Pendiente (24h)</option>
+                        <option value="new">Nueva</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterDropoffStatus">📦 Estado Drop-off</label>
+                    <select id="filterDropoffStatus">
+                        <option value="">Todos</option>
+                        <option value="current">Actual</option>
+                        <option value="pending">Pendiente (24h)</option>
+                        <option value="new">Nueva</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="searchMember">🔍 Booking</label>
+                    <input type="text" id="searchMember" placeholder="Buscar ID de reserva...">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="reset-filters" onclick="resetFilters()">🔄 Limpiar Filtros</button>
+                <button class="refresh-data" onclick="loadData()">🔄 Actualizar Datos</button>
+            </div>
+        </header>
+
+        <!-- Resultado count -->
+        <div class="result-count" id="resultCount"></div>
+
+        <!-- Sección de Vehículos en Preparación -->
+        <div id="preparationSection" class="vehicles-preparation" style="display: none;">
+            <h2 class="section-title">⏱️ Próximas Entregas</h2>
+            <div id="preparationContainer" class="prep-grid"></div>
+        </div>
+
+        <!-- Grid de Reservas -->
+        <div id="bookingsContainer" class="bookings-grid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Cargando reservas...</p>
+            </div>
+        </div>
+
+        <!-- Sección de Análitica -->
+        <div id="analyticsSection" class="analytics-section" style="display: none;">
+            <h2 class="section-title">📈 Análitica</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title">📅 Últimos 30 Días</div>
+                    <div class="chart-container">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Reservas Mensual</div>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">🚙 Top 10 Vehículos</div>
+                    <div class="chart-container">
+                        <canvas id="vehicleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">📭</div>
+            <h2>No hay reservas que coincidan</h2>
+            <p>Intenta cambiar los filtros</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Dashboard de Reservas • Actualizado automáticamente • © 2026</p>
+    </footer>
+
+    <script>
+        // CONFIGURACIÓN
+        const GOOGLE_SHEET_ID = '1pbgu_CAaeFcd06-E_DkgOihvCLTzAsM276bOu69rrxQ';
+        const SHEET_GID = '0'; // ID de la pestaña "Bookings"
+
+        // URL CSV (usando exportación de Google Sheets)
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+
+        // Campos esperados (mapeo de columnas)
+        const COLUMNS = {
+            ID: 0,
+            MEMBER: 1,
+            VEHICLE: 2,
+            PICKUP_LOCATION: 3,
+            DROPOFF_LOCATION: 4,
+            PICKUP_DATETIME: 5,
+            DROPOFF_DATETIME: 6,
+        };
+
+        // Variables globales
+        let allBookings = [];
+        let filteredBookings = [];
+        let activeIndicatorFilter = null;
+        let vehicles = [];
+        let charts = {};
+
+        // ====== FUNCIÓN DE PARSEO DE FECHAS ======
+        function parseDateTime(raw) {
+            if (!raw) return null;
+            const text = String(raw).trim();
+            if (!text) return null;
+
+            const native = new Date(text);
+            if (!isNaN(native.getTime())) return native;
+
+            const simple = text.match(/(\d{1,2}:\d{2})\s*(AM|PM)\s+(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/i);
+            if (simple) {
+                let [, time, ampm, part1, part2, year] = simple;
+                let [hour, minute] = time.split(':').map(n => parseInt(n, 10));
+                if (/am/i.test(ampm)) {
+                    if (hour === 12) hour = 0;
+                } else {
+                    if (hour !== 12) hour += 12;
+                }
+
+                let month = parseInt(part1, 10);
+                let day = parseInt(part2, 10);
+                if (month > 12 && day <= 12) {
+                    [month, day] = [day, month];
+                }
+
+                return new Date(parseInt(year, 10), month - 1, day, hour, minute);
+            }
+
+            const long = text.match(/(\d{1,2}:\d{2})\s*(AM|PM)\s+([A-Za-záéíóúñ]+)\s+(\d{1,2}),\s*(\d{4})/i);
+            if (long) {
+                let [, time, ampm, monthName, day, year] = long;
+                let [hour, minute] = time.split(':').map(n => parseInt(n, 10));
+                if (/am/i.test(ampm)) {
+                    if (hour === 12) hour = 0;
+                } else {
+                    if (hour !== 12) hour += 12;
+                }
+
+                const monthMap = {
+                    enero: 1, january: 1, february: 2, febrero: 2, marzo: 3, march: 3, april: 4, abril: 4,
+                    mayo: 5, may: 5, junio: 6, june: 6, julio: 7, july: 7, agosto: 8, august: 8,
+                    septiembre: 9, september: 9, october: 10, octubre: 10, novembre: 11, november: 11, diciembre: 12, december: 12
+                };
+
+                const month = monthMap[monthName.toLowerCase()] || 1;
+                return new Date(parseInt(year, 10), month - 1, parseInt(day, 10), hour, minute);
+            }
+
+            return null;
+        }
+
+        function formatDateTime(date) {
+            if (!date || isNaN(date.getTime())) return '';
+            let formatted = date.toLocaleString('es-AR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            return formatted.replace('a. m.', 'am').replace('p. m.', 'pm');
+        }
+
+        function formatDateOnly(date) {
+            if (!date || isNaN(date.getTime())) return '';
+            return date.toLocaleDateString('es-AR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        // ====== CÁLCULO DE ESTADO ======
+        function computeStatus(targetDate) {
+            if (!targetDate || isNaN(targetDate.getTime())) return 'unknown';
+            const now = new Date();
+            const diffMs = targetDate.getTime() - now.getTime();
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+            if (diffMs < 0) return 'current';
+            if (diffMs <= ONE_DAY_MS) return 'pending';
+            return 'new';
+        }
+
+        function getStatusLabel(status) {
+            if (status === 'current') return 'Actual';
+            if (status === 'pending') return 'Pendiente (24h)';
+            if (status === 'new') return 'Nueva';
+            return 'Desconocido';
+        }
+
+        function getStatusBadgeClass(status) {
+            if (status === 'current') return 'status-current';
+            if (status === 'pending') return 'status-pending';
+            if (status === 'new') return 'status-new';
+            return 'status-unknown';
+        }
+
+        function extractModel(vehicleName) {
+            if (!vehicleName) return '';
+            // Extraer el modelo del nombre completo del vehículo
+            // Ejemplos: "Toyota Yaris HB AT AH007UY" -> "Yaris"
+            // "Toyota Corolla Cross HB CVT AH008UY" -> "Corolla"
+            const parts = vehicleName.split(' ');
+            if (parts.length >= 2) {
+                // Buscar modelos conocidos
+                const knownModels = ['Yaris', 'Corolla', 'Hilux', 'SW4', 'Etios', 'RAV4', 'Prius'];
+                for (const model of knownModels) {
+                    if (vehicleName.toLowerCase().includes(model.toLowerCase())) {
+                        return model;
+                    }
+                }
+                // Si no encuentra modelo conocido, tomar la segunda palabra
+                return parts[1];
+            }
+            return vehicleName;
+        }
+
+        function normalizeLocation(location) {
+            if (!location) return '';
+            const loc = location.toLowerCase().trim();
+            if (loc.includes('aeropuerto')) return 'Aeropuerto';
+            if (loc.includes('jujuy')) return 'Jujuy';
+            if (loc.includes('salta')) return 'Salta';
+            return location.trim();
+        }
+
+        // ====== CÁLCULO DE TIEMPO DE PREPARACIÓN CON HORARIOS LABORALES ======
+        function calculatePreparationTime(dropoffDate, nextPickupDate) {
+            if (!dropoffDate || !nextPickupDate) return null;
+            if (isNaN(dropoffDate.getTime()) || isNaN(nextPickupDate.getTime())) return null;
+
+            const totalMs = nextPickupDate.getTime() - dropoffDate.getTime();
+            if (totalMs < 0) return null;
+
+            // Calcular tiempo considerando solo horas laborales (L-V 9:00-18:30)
+            let workingMinutes = 0;
+            let current = new Date(dropoffDate);
+
+            while (current < nextPickupDate) {
+                const dayOfWeek = current.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
+                const isWorkingDay = dayOfWeek >= 1 && dayOfWeek <= 5; // L-V
+
+                if (isWorkingDay) {
+                    const startOfDay = new Date(current);
+                    startOfDay.setHours(9, 0, 0, 0);
+
+                    const endOfDay = new Date(current);
+                    endOfDay.setHours(18, 30, 0, 0);
+
+                    const dayStart = current < startOfDay ? startOfDay : current;
+                    const dayEnd = new Date(Math.min(nextPickupDate.getTime(), endOfDay.getTime()));
+
+                    if (dayStart < dayEnd) {
+                        workingMinutes += (dayEnd - dayStart) / (1000 * 60);
+                    }
+                }
+
+                current.setDate(current.getDate() + 1);
+                current.setHours(0, 0, 0, 0);
+            }
+
+            const days = Math.floor(workingMinutes / (24 * 60));
+            const hours = Math.floor((workingMinutes % (24 * 60)) / 60);
+            const minutes = Math.floor(workingMinutes % 60);
+
+            return { days, hours, minutes, totalMinutes: workingMinutes, totalMs };
+        }
+
+        function getPrepStatus(prepTime) {
+            if (!prepTime) return 'ok';
+            const hrs = prepTime.hours + (prepTime.days * 9); // Aproximadamente horas laborales por día
+            if (hrs < 3) return 'critical';
+            if (hrs < 8) return 'warning';
+            return 'ok';
+        }
+
+        // ====== VEHÍCULOS EN PREPARACIÓN ======
+        function calculateVehiclesInPreparation() {
+            const vehicleMap = {};
+            allBookings.forEach(booking => {
+                if (!booking.vehicle) return;
+                if (!vehicleMap[booking.vehicle]) vehicleMap[booking.vehicle] = [];
+                vehicleMap[booking.vehicle].push(booking);
+            });
+
+            const preparationData = [];
+            Object.entries(vehicleMap).forEach(([vehicleName, bookings]) => {
+                bookings.sort((a, b) => {
+                    const timeA = a.pickupDate ? a.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    const timeB = b.pickupDate ? b.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    return timeA - timeB;
+                });
+
+                const now = new Date();
+                let currentBooking = null, nextBooking = null;
+                for (let i = 0; i < bookings.length; i++) {
+                    const booking = bookings[i];
+                    if (booking.pickupDate && booking.dropoffDate && 
+                        booking.pickupDate <= now && booking.dropoffDate >= now) {
+                        currentBooking = booking;
+                        nextBooking = bookings[i + 1] || null;
+                        break;
+                    }
+                }
+
+                if (currentBooking && nextBooking && currentBooking.dropoffDate && nextBooking.pickupDate) {
+                    const prepTime = calculatePreparationTime(currentBooking.dropoffDate, nextBooking.pickupDate);
+                    if (prepTime) {
+                        preparationData.push({
+                            vehicle: vehicleName,
+                            currentBooking,
+                            nextBooking,
+                            prepTime,
+                            status: getPrepStatus(prepTime)
+                        });
+                    }
+                }
+            });
+
+            return preparationData.sort((a, b) => a.prepTime.totalMs - b.prepTime.totalMs);
+        }
+
+        function createPrepCard(data) {
+            const card = document.createElement('div');
+            card.className = `prep-card ${data.status}`;
+
+            const prepText = data.prepTime.days > 0 
+                ? `${data.prepTime.days}d ${data.prepTime.hours}h`
+                : `${data.prepTime.hours}h ${data.prepTime.minutes}m`;
+
+            // Para estados críticos, calcular tiempo normal (total milliseconds)
+            let normalTimeText = '';
+            if (data.status === 'critical') {
+                const totalMs = data.nextBooking.pickupDate.getTime() - data.currentBooking.dropoffDate.getTime();
+                const totalHours = Math.floor(totalMs / (1000 * 60 * 60));
+                const totalDays = Math.floor(totalHours / 24);
+                const remainingHours = totalHours % 24;
+                const totalMinutes = Math.floor((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+                normalTimeText = totalDays > 0 
+                    ? `${totalDays}d ${remainingHours}h` 
+                    : `${totalHours}h ${totalMinutes}m`;
+            }
+
+            const statusBadgeMap = {
+                critical: 'prep-status-critical',
+                warning: 'prep-status-warning',
+                ok: 'prep-status-ok'
+            };
+
+            const statusTextMap = {
+                critical: '🔴 CRÍTICO',
+                warning: '🟡 ATENCIÓN',
+                ok: '🟢 OK'
+            };
+
+            card.innerHTML = `
+                <div class="prep-header">
+                    <div class="prep-vehicle-name">${data.vehicle}</div>
+                    <div class="prep-status-badge ${statusBadgeMap[data.status]}">${statusTextMap[data.status]}</div>
+                </div>
+
+                <div class="prep-info">
+                    <div class="prep-info-row">
+                        <strong>Pasajero actual:</strong>
+                        <span>${data.currentBooking.member}</span>
+                    </div>
+                    <div class="prep-info-row">
+                        <strong>Devuelve:</strong>
+                        <span>${formatDateTime(data.currentBooking.dropoffDate)}</span>
+                    </div>
+                    <div class="prep-info-row">
+                        <strong>Próximo pasajero:</strong>
+                        <span>${data.nextBooking.member}</span>
+                    </div>
+                    <div class="prep-info-row">
+                        <strong>Retira:</strong>
+                        <span>${formatDateTime(data.nextBooking.pickupDate)}</span>
+                    </div>
+                    ${data.status === 'critical' ? `<div class="prep-info-row" style="border-top: 1px solid rgba(239, 68, 68, 0.3); padding-top: 6px; margin-top: 6px;">
+                        <strong>Tiempo normal:</strong>
+                        <span>${normalTimeText}</span>
+                    </div>` : ''}
+                </div>
+
+                <div class="prep-time-countdown">${prepText}</div>
+            `;
+
+            return card;
+        }
+
+        function renderPreparation() {
+            const prepData = calculateVehiclesInPreparation();
+            const section = document.getElementById('preparationSection');
+            const container = document.getElementById('preparationContainer');
+
+            if (prepData.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            container.innerHTML = '';
+            prepData.forEach(data => {
+                container.appendChild(createPrepCard(data));
+            });
+        }
+
+        // ====== GRÁFICOS ======
+        function createDailyChart() {
+            const last30Days = [];
+            const data = {};
+
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const key = formatDateOnly(d);
+                last30Days.push(key);
+                data[key] = 0;
+            }
+
+            allBookings.forEach(booking => {
+                if (booking.pickupDate) {
+                    const key = formatDateOnly(booking.pickupDate);
+                    if (data[key] !== undefined) {
+                        data[key]++;
+                    }
+                }
+            });
+
+            const counts = last30Days.map(day => data[day] || 0);
+
+            if (charts.daily) charts.daily.destroy();
+
+            const ctx = document.getElementById('dailyChart');
+            charts.daily = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last30Days,
+                    datasets: [{
+                        label: 'Reservas Diarias',
+                        data: counts,
+                        borderColor: 'rgb(0, 112, 141)',
+                        backgroundColor: 'rgba(0, 112, 141, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgb(0, 112, 141)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'rgba(255,255,255,0.7)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'rgba(255,255,255,0.7)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createMonthlyChart() {
+            const months = {};
+
+            allBookings.forEach(booking => {
+                if (booking.pickupDate) {
+                    const key = booking.pickupDate.toLocaleString('es-AR', { month: 'short', year: '2-digit' });
+                    months[key] = (months[key] || 0) + 1;
+                }
+            });
+
+            const sortedMonths = Object.entries(months)
+                .sort(([a], [b]) => {
+                    const dateA = new Date(a.split(' ')[1], ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].indexOf(a.split(' ')[0].toLowerCase()));
+                    const dateB = new Date(b.split(' ')[1], ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].indexOf(b.split(' ')[0].toLowerCase()));
+                    return dateA - dateB;
+                });
+
+            const labels = sortedMonths.map(m => m[0]);
+            const counts = sortedMonths.map(m => m[1]);
+
+            if (charts.monthly) charts.monthly.destroy();
+
+            const ctx = document.getElementById('monthlyChart');
+            charts.monthly = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Reservas por Mes',
+                        data: counts,
+                        backgroundColor: 'rgba(0, 128, 141, 0.8)',
+                        borderColor: 'rgb(0, 128, 141)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'rgba(255,255,255,0.7)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'rgba(255,255,255,0.7)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createVehicleChart() {
+            const modelCount = {};
+            const totalBookings = allBookings.length;
+
+            allBookings.forEach(booking => {
+                if (booking.vehicle) {
+                    const model = extractModel(booking.vehicle);
+                    if (model && ['Yaris', 'Corolla', 'Hilux', 'SW4', 'Etios', 'RAV4', 'Prius'].includes(model)) {
+                        modelCount[model] = (modelCount[model] || 0) + 1;
+                    }
+                }
+            });
+
+            const labels = Object.keys(modelCount);
+            const counts = Object.values(modelCount);
+            const percentages = counts.map(count => ((count / totalBookings) * 100).toFixed(1) + '%');
+
+            const colors = [
+                '#00808d', '#00495c', '#59a2b5', '#a6cdd7', '#002732', '#38434b', '#ebf4f6'
+            ];
+
+            if (charts.vehicle) charts.vehicle.destroy();
+
+            const ctx = document.getElementById('vehicleChart');
+            if (!ctx) return; // Safety check
+
+            charts.vehicle = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels.map((label, i) => `${label} (${percentages[i]})`),
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: colors.slice(0, labels.length)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: 'rgba(255,255,255,0.7)', font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderAnalytics() {
+            if (allBookings.length === 0) {
+                document.getElementById('analyticsSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('analyticsSection').style.display = 'block';
+            createDailyChart();
+            createMonthlyChart();
+            createVehicleChart();
+        }
+
+        // ====== CONSTRUCCIÓN DE RESERVA ======
+        function buildBooking(row) {
+            const member = String(row[COLUMNS.MEMBER] || '').trim();
+            const vehicle = String(row[COLUMNS.VEHICLE] || '').trim();
+            const pickupLocation = normalizeLocation(String(row[COLUMNS.PICKUP_LOCATION] || '').trim());
+            const dropoffLocation = normalizeLocation(String(row[COLUMNS.DROPOFF_LOCATION] || '').trim());
+            const pickupRaw = String(row[COLUMNS.PICKUP_DATETIME] || '').trim();
+            const dropoffRaw = String(row[COLUMNS.DROPOFF_DATETIME] || '').trim();
+
+            const pickupDate = parseDateTime(pickupRaw);
+            const dropoffDate = parseDateTime(dropoffRaw);
+
+            return {
+                id: String(row[COLUMNS.ID] || '').trim(),
+                member,
+                vehicle,
+                pickupLocation,
+                dropoffLocation,
+                pickupRaw,
+                dropoffRaw,
+                pickupDate,
+                dropoffDate,
+                pickupStatus: computeStatus(pickupDate),
+                dropoffStatus: computeStatus(dropoffDate),
+                dateInvalid: !pickupDate || !dropoffDate
+            };
+        }
+
+        function getNextBookingForVehicle(vehicleName, currentBooking) {
+            const bookingsForVehicle = allBookings.filter(b => b.vehicle === currentBooking.vehicle && b.id !== currentBooking.id);
+            bookingsForVehicle.sort((a, b) => {
+                const timeA = a.pickupDate ? a.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                const timeB = b.pickupDate ? b.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                return timeA - timeB;
+            });
+            return bookingsForVehicle.find(b => b.pickupDate && b.pickupDate > currentBooking.dropoffDate) || null;
+        }
+
+        function calculateDuration(startDate, endDate) {
+            if (!startDate || !endDate) return null;
+            const ms = endDate.getTime() - startDate.getTime();
+            if (ms < 0) return null;
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            return { days, hours, minutes };
+        }
+
+        function getTimeRemaining(targetDate) {
+            if (!targetDate) return null;
+            const now = new Date();
+            const ms = targetDate.getTime() - now.getTime();
+            if (ms < 0) return null;
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            return { days, hours, minutes };
+        }
+
+        function getDayName(date) {
+            if (!date) return '';
+            return date.toLocaleDateString('es-AR', { weekday: 'long', month: 'short', day: 'numeric' });
+        }
+
+        function createBookingCard(booking) {
+            const lugarClass = booking.pickupLocation === 'Salta' ? 'salta' : (booking.pickupLocation === 'Aeropuerto' ? 'aeropuerto' : (booking.pickupLocation === 'Jujuy' ? 'jujuy' : ''));
+            const lugarCardClass = booking.pickupLocation === 'Salta' ? 'lugar-salta' : (booking.pickupLocation === 'Aeropuerto' ? 'lugar-aeropuerto' : (booking.pickupLocation === 'Jujuy' ? 'lugar-jujuy' : ''));
+
+            const pickupLabel = booking.pickupDate ? formatDateTime(booking.pickupDate) : booking.pickupRaw || 'Sin fecha';
+            const dropoffLabel = booking.dropoffDate ? formatDateTime(booking.dropoffDate) : booking.dropoffRaw || 'Sin fecha';
+            const pickupDayName = booking.pickupDate ? getDayName(booking.pickupDate) : '';
+            const dropoffDayName = booking.dropoffDate ? getDayName(booking.dropoffDate) : '';
+
+            const isPickupWeekend = booking.pickupDate && (booking.pickupDate.getDay() === 0 || booking.pickupDate.getDay() === 6);
+            const isDropoffWeekend = booking.dropoffDate && (booking.dropoffDate.getDay() === 0 || booking.dropoffDate.getDay() === 6);
+
+            // Calcular duración de la reserva
+            const duration = calculateDuration(booking.pickupDate, booking.dropoffDate);
+            const durationText = duration ? (duration.days > 0 
+                ? `${duration.days}d ${duration.hours}h ${duration.minutes}m`
+                : `${duration.hours}h ${duration.minutes}m`) : 'N/A';
+
+            // Calcular tiempo faltante para entrega (drop-off)
+            const timeToDelivery = getTimeRemaining(booking.dropoffDate);
+            const deliveryText = timeToDelivery ? (timeToDelivery.days > 0
+                ? `${timeToDelivery.days}d ${timeToDelivery.hours}h`
+                : timeToDelivery.hours > 0 ? `${timeToDelivery.hours}h ${timeToDelivery.minutes}m` : `${timeToDelivery.minutes}m`) : 'Vencida';
+
+            // Obtener próxima reserva del vehículo
+            const nextBooking = getNextBookingForVehicle(booking.vehicle, booking);
+            let nextBookingText = 'Sin próxima reserva';
+            if (nextBooking && nextBooking.pickupDate) {
+                const timeToNext = getTimeRemaining(nextBooking.pickupDate);
+                if (timeToNext) {
+                    nextBookingText = timeToNext.days > 0
+                        ? `${timeToNext.days}d ${timeToNext.hours}h ${timeToNext.minutes}m`
+                        : timeToNext.hours > 0 ? `${timeToNext.hours}h ${timeToNext.minutes}m` : `${timeToNext.minutes}m`;
+                }
+            }
+
+            const card = document.createElement('div');
+            card.className = `booking-card ${lugarCardClass}`;
+            if (booking.dateInvalid) {
+                card.classList.add('date-invalid');
+            }
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">${booking.member} - ${booking.vehicle}</div>
+                        <div class="card-location ${lugarClass}">${booking.pickupLocation || 'Sin lugar'}</div>
+                        ${isPickupWeekend ? '<div class="weekend-indicator">🏖️ Pick-up Fin de Semana</div>' : ''}
+                        ${isDropoffWeekend ? '<div class="weekend-indicator">🏖️ Drop-off Fin de Semana</div>' : ''}
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    ${booking.dateInvalid ? '<div class="date-invalid-indicator">⚠️ FECHA INVÁLIDA</div>' : ''}
+
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <button class="status-button ${booking.pickupStatus}" style="pointer-events: none;">
+                            <div class="status-button-title">Pick-up</div>
+                        </button>
+                        <div class="booking-detail-value period" style="flex: 1; text-align: right;">${pickupLabel}</div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <button class="status-button ${booking.dropoffStatus}" style="pointer-events: none;">
+                            <div class="status-button-title">Drop-off</div>
+                        </button>
+                        <div class="booking-detail-value period" style="flex: 1; text-align: right;">${dropoffLabel}</div>
+                    </div>
+
+                    <div style="margin-top: 10px;">
+                        <div class="booking-detail-row">
+                            <div class="booking-detail-row-label">Duración:</div>
+                            <div class="booking-detail-row-value">${durationText}</div>
+                        </div>
+                        <div class="booking-detail-row">
+                            <div class="booking-detail-row-label">Entrega en:</div>
+                            <div class="booking-detail-row-value" style="color: ${timeToDelivery && timeToDelivery.hours < 24 ? '#ef4444' : 'var(--text-secondary)'};">${deliveryText}</div>
+                        </div>
+                        <div class="booking-detail-row">
+                            <div class="booking-detail-row-label">Próxima Reserva:</div>
+                            <div class="booking-detail-row-value">${nextBookingText}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // ====== CARGA DE DATOS ======
+        function loadData() {
+            loadBookings();
+        }
+
+        async function loadBookings() {
+            try {
+                const container = document.getElementById('bookingsContainer');
+                container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Cargando reservas...</p></div>';
+
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+
+                Papa.parse(csvText, {
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (!results || !Array.isArray(results.data) || results.data.length < 2) {
+                            showEmptyState();
+                            return;
+                        }
+
+                        allBookings = results.data.slice(1)
+                            .filter(row => Array.isArray(row) && row[COLUMNS.ID] && String(row[COLUMNS.ID]).trim())
+                            .map(buildBooking);
+
+                        vehicles = [...new Set(allBookings.map(b => extractModel(b.vehicle)).filter(v => v))].sort();
+                        populateVehicleFilter();
+
+                        renderPreparation();
+                        renderAnalytics();
+                        filterAndDisplay();
+
+                        // Si no hay reservas filtradas después de aplicar filtros guardados, limpiar filtros
+                        if (filteredBookings.length === 0 && allBookings.length > 0) {
+                            resetFilters();
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error parsing CSV:', error);
+                        showErrorState('Error al cargar los datos.');
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                showErrorState('No se pudo cargar los datos. Verifica la URL del Google Sheet.');
+            }
+        }
+
+        function populateVehicleFilter() {
+            const select = document.getElementById('filterVehicle');
+            select.innerHTML = '<option value="">Todos</option>';
+            vehicles.forEach(vehicle => {
+                const option = document.createElement('option');
+                option.value = vehicle;
+                option.textContent = vehicle;
+                select.appendChild(option);
+            });
+        }
+
+        // ====== FILTRADO Y VISUALIZACIÓN ======
+        function matchesIndicator(booking) {
+            if (!activeIndicatorFilter) return true;
+            const now = new Date();
+            const next48h = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+            const next7d = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+            switch (activeIndicatorFilter) {
+                case 'vigentes':
+                    return booking.pickupDate && booking.dropoffDate && booking.pickupDate <= now && booking.dropoffDate >= now;
+                case 'pendientes':
+                    return booking.pickupDate && booking.pickupDate > now && booking.pickupDate <= next48h;
+                case 'criticos':
+                    return booking.dateInvalid || (booking.dropoffDate && booking.dropoffDate < now);
+                case 'devoluciones':
+                    return booking.dropoffDate && booking.dropoffDate > now && booking.dropoffDate <= next48h;
+                case 'pickups':
+                    return booking.pickupDate && booking.pickupDate > now && booking.pickupDate <= next7d;
+                case 'dropoffs':
+                    return booking.dropoffDate && booking.dropoffDate > now && booking.dropoffDate <= next7d;
+                default:
+                    return true;
+            }
+        }
+
+        function filterAndDisplay() {
+            if (!allBookings || allBookings.length === 0) {
+                return; // No filtrar si no hay datos cargados
+            }
+
+            const filterLugar = normalizeLocation(document.getElementById('filterLugar').value).toLowerCase().trim();
+            const filterVehicle = document.getElementById('filterVehicle').value.toLowerCase().trim();
+            const filterPickupStatus = document.getElementById('filterPickupStatus').value;
+            const filterDropoffStatus = document.getElementById('filterDropoffStatus').value;
+            const searchBookingId = document.getElementById('searchMember').value.toLowerCase().trim();
+
+            filteredBookings = allBookings.filter(booking => {
+                const bookingLugar = (booking.pickupLocation || '').toLowerCase().trim();
+                const bookingVehicle = (booking.vehicle || '').toLowerCase().trim();
+                const bookingId = (booking.id || '').toLowerCase().trim();
+
+                const matchesLugar = !filterLugar || bookingLugar === filterLugar;
+                const matchesVehicle = !filterVehicle || extractModel(booking.vehicle).toLowerCase().trim() === filterVehicle;
+                const matchesPickup = !filterPickupStatus || booking.pickupStatus === filterPickupStatus;
+                const matchesDropoff = !filterDropoffStatus || booking.dropoffStatus === filterDropoffStatus;
+                const matchesBooking = !searchBookingId || bookingId.includes(searchBookingId);
+
+                return matchesLugar && matchesVehicle && matchesPickup && matchesDropoff && matchesBooking && matchesIndicator(booking);
+            });
+
+            filteredBookings.sort((a, b) => {
+                const timeA = a.pickupDate ? a.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                const timeB = b.pickupDate ? b.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                return timeA - timeB;
+            });
+
+            displayBookings();
+            updateStatistics();
+            saveFiltersToStorage();
+        }
+
+        function setIndicatorFilter(filter) {
+            activeIndicatorFilter = filter;
+            // Remover clase active de todos
+            document.querySelectorAll('.status-item').forEach(item => item.classList.remove('active'));
+            // Agregar a este
+            event.target.closest('.status-item').classList.add('active');
+            filterAndDisplay();
+        }
+
+        function displayBookings() {
+            const container = document.getElementById('bookingsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filteredBookings.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                document.getElementById('resultCount').textContent = '0 reservas encontradas';
+                return;
+            }
+
+            container.innerHTML = '';
+            emptyState.style.display = 'none';
+
+            filteredBookings.forEach(booking => {
+                container.appendChild(createBookingCard(booking));
+            });
+
+            document.getElementById('resultCount').textContent =
+                `${filteredBookings.length} reserva(s) encontrada(s) de ${allBookings.length}`;
+        }
+
+        function updateStatistics() {
+            const now = new Date();
+            const next48h = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+            const next7d = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+            let vigentes = 0;
+            let pendientes = 0;
+            let devoluciones = 0;
+            let criticos = 0;
+            let pickupsProximos = 0;
+            let dropoffsProximos = 0;
+
+            const sourceBookings = allBookings || [];
+            sourceBookings.forEach(booking => {
+                const pickup = booking.pickupDate;
+                const dropoff = booking.dropoffDate;
+
+                // Casos críticos: fechas inválidas o drop-off ya vencido
+                if (booking.dateInvalid || (dropoff && dropoff < now)) {
+                    criticos++;
+                }
+
+                if (pickup && dropoff) {
+                    // Vigentes: en curso ahora (pickup <= ahora <= dropoff)
+                    if (pickup <= now && dropoff >= now) {
+                        vigentes++;
+                    }
+
+                    // Pendientes: próximas pick-ups dentro de las próximas 48 horas
+                    if (pickup > now && pickup <= next48h) {
+                        pendientes++;
+                    }
+
+                    // Devoluciones: próximos drop-offs dentro de las próximas 48 horas
+                    if (dropoff > now && dropoff <= next48h) {
+                        devoluciones++;
+                    }
+
+                    // Próximos pick-ups: pick-ups dentro de los próximos 7 días
+                    if (pickup > now && pickup <= next7d) {
+                        pickupsProximos++;
+                    }
+
+                    // Próximos drop-offs: drop-offs dentro de los próximos 7 días
+                    if (dropoff > now && dropoff <= next7d) {
+                        dropoffsProximos++;
+                    }
+                }
+            });
+
+            // Agregar vehículos en preparación crítica
+            const prepData = calculateVehiclesInPreparation();
+            const prepCriticos = prepData.filter(p => p.status === 'critical').length;
+            criticos += prepCriticos;
+
+            document.getElementById('pickupCurrentCount').textContent = vigentes;
+            document.getElementById('pickupPendingCount').textContent = pendientes;
+            document.getElementById('criticalCount').textContent = criticos;
+            document.getElementById('dropoffCurrentCount').textContent = devoluciones;
+            document.getElementById('upcomingPickupsCount').textContent = pickupsProximos;
+            document.getElementById('upcomingDropoffsCount').textContent = dropoffsProximos;
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('bookingsContainer');
+            const emptyState = document.getElementById('emptyState');
+            container.innerHTML = '';
+            emptyState.style.display = 'block';
+        }
+
+        function showErrorState(message) {
+            const container = document.getElementById('bookingsContainer');
+            container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">❌</div><h2>${message}</h2></div>`;
+        }
+
+        function resetFilters() {
+            document.getElementById('filterLugar').value = '';
+            document.getElementById('filterVehicle').value = '';
+            document.getElementById('filterPickupStatus').value = '';
+            document.getElementById('filterDropoffStatus').value = '';
+            document.getElementById('searchMember').value = '';
+            activeIndicatorFilter = null;
+            document.querySelectorAll('.status-item').forEach(item => item.classList.remove('active'));
+            localStorage.removeItem('dashboardFilters');
+            filterAndDisplay();
+        }
+
+        // ====== SISTEMA DE TEMAS ======
+        function toggleTheme() {
+            const btn = document.getElementById('themeToggleBtn');
+            const currentTheme = btn.dataset.theme || 'kinto-dark';
+            const newTheme = currentTheme === 'kinto-dark' ? 'kinto-light' : 'kinto-dark';
+            applyTheme(newTheme);
+        }
+
+        function applyTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('dashboardTheme', themeName);
+
+            // Actualizar botón con icono apropiado
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) {
+                btn.dataset.theme = themeName;
+                btn.textContent = themeName === 'kinto-dark' ? '🌙' : '☀️';
+            }
+
+            // Actualizar etiqueta de marca
+            const brandLabel = document.getElementById('brandLabel');
+            if (brandLabel) {
+                brandLabel.textContent = 'KINTO';
+            }
+
+            // Forzar actualización de gráficos (Canvas reutilizará colores CSS)
+            setTimeout(() => {
+                if (allBookings.length > 0) {
+                    renderAnalytics();
+                }
+            }, 100);
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('dashboardTheme') || 'kinto-dark';
+            applyTheme(saved);
+        }
+
+        // ====== PERSISTENCIA DE FILTROS ======
+        function saveFiltersToStorage() {
+            const filters = {
+                lugar: document.getElementById('filterLugar').value,
+                vehicle: document.getElementById('filterVehicle').value,
+                pickupStatus: document.getElementById('filterPickupStatus').value,
+                dropoffStatus: document.getElementById('filterDropoffStatus').value,
+                bookingId: document.getElementById('searchMember').value
+            };
+            localStorage.setItem('dashboardFilters', JSON.stringify(filters));
+        }
+
+        function loadFiltersFromStorage() {
+            const saved = localStorage.getItem('dashboardFilters');
+            if (!saved) return;
+
+            try {
+                const filters = JSON.parse(saved);
+                if (filters.lugar !== undefined) document.getElementById('filterLugar').value = filters.lugar;
+                if (filters.vehicle !== undefined) document.getElementById('filterVehicle').value = filters.vehicle;
+                if (filters.pickupStatus !== undefined) document.getElementById('filterPickupStatus').value = filters.pickupStatus;
+                if (filters.dropoffStatus !== undefined) document.getElementById('filterDropoffStatus').value = filters.dropoffStatus;
+                if (filters.bookingId !== undefined) document.getElementById('searchMember').value = filters.bookingId;
+            } catch (e) {
+                console.error('Error loading filters:', e);
+            }
+        }
+
+        // ====== INICIALIZACIÓN ======
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadFiltersFromStorage();
+
+            document.getElementById('filterLugar').addEventListener('change', filterAndDisplay);
+            document.getElementById('filterVehicle').addEventListener('change', filterAndDisplay);
+            document.getElementById('filterPickupStatus').addEventListener('change', filterAndDisplay);
+            document.getElementById('filterDropoffStatus').addEventListener('change', filterAndDisplay);
+            document.getElementById('searchMember').addEventListener('input', filterAndDisplay);
+
+            loadBookings();
+        });
+    </script>
+</body>
+</html>

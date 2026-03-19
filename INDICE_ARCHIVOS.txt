@@ -1,0 +1,226 @@
+📱 DASHBOARD DE RESERVAS - ÍNDICE DE ARCHIVOS Y ESTRUCTURA
+=========================================================
+
+Ubicación: c:\Users\usuario\Desktop\App\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📄 ARCHIVOS PRINCIPALES (APLICACIÓN)
+────────────────────────────────────
+
+1. 📌 index.html [RECOMENDADO - ABRE ESTO]
+   ├─ Tipo: Aplicación web HTML/CSS/JavaScript
+   ├─ Descripción: Dashboard interactivo completo, funciona en cualquier navegador
+   ├─ Características:
+   │  ├─ Carga datos desde Google Sheets automáticamente
+   │  ├─ Filtros dinámicos (Lugar, Vehículo, Estado, Búsqueda)
+   │  ├─ Códigos de color por ubicación
+   │  ├─ Alertas visuales por estado de próxima reserva
+   │  ├─ Barra de estadísticas en tiempo real
+   │  ├─ Diseño responsivo (desktop, tablet, móvil)
+   │  └─ 100% funcional sin servidor
+   ├─ Cómo usar:
+   │  ├─ 1. Haz doble clic en el archivo
+   │  ├─ 2. Se abrirá automáticamente en tu navegador
+   │  └─ 3. Los datos se cargarán en 2-3 segundos
+   ├─ Requisitos: Navegador web (Chrome, Firefox, Edge, Safari)
+   └─ Nota: Este es el formato recomendado por su facilidad
+
+2. 📌 app.py [ALTERNATIVA - PYTHON/STREAMLIT]
+   ├─ Tipo: Aplicación Python con Streamlit
+   ├─ Descripción: Alternativa si tienes problemas con CORS en la versión HTML
+   ├─ Características:
+   │  ├─ Interfaz moderna con Streamlit
+   │  ├─ Mismo funcionalidad que index.html
+   │  ├─ Versión en tarjetas disponible
+   │  ├─ Exportación a CSV y Excel
+   │  ├─ Cache automático de datos
+   │  └─ Mejor manejo de CORS
+   ├─ Cómo usar:
+   │  ├─ 1. Instala dependencias: pip install streamlit pandas
+   │  ├─ 2. Ejecuta: streamlit run app.py
+   │  ├─ 3. Abre http://localhost:8501 en tu navegador
+   │  └─ 4. ¡Listo!
+   └─ Requisitos: Python 3.7+ instalado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTACIÓN Y GUÍAS
+───────────────────────
+
+3. 📘 README.md [LECTURA RECOMENDADA]
+   ├─ Contenido: Instrucciones completas en español
+   ├─ Incluye:
+   │  ├─ Inicio rápido (3 pasos)
+   │  ├─ Explicación de características
+   │  ├─ Estructura de datos esperada
+   │  ├─ Tecnología usada
+   │  ├─ Solución de problemas básicos
+   │  └─ Cómo personalizar la app
+   └─ Lee esto primero si tienes dudas
+
+4. 📗 INICIO_RAPIDO.txt [PARA USUARIO IMPACIENTE]
+   ├─ Contenido: Guía ultra-rápida en texto simple
+   ├─ Incluye:
+   │  ├─ 3 pasos para empezar
+   │  ├─ Características principales
+   │  ├─ Problemas básicos y soluciones
+   │  └─ Información de contacto
+   └─ Perfecto si solo quieres empezar YA
+
+5. 📙 CONFIG_AVANZADA.txt [PARA TÉCNICOS]
+   ├─ Contenido: Detalles técnicos y personalización
+   ├─ Incluye:
+   │  ├─ Cómo cambiar la URL del Google Sheet
+   │  ├─ Mapeo de columnas
+   │  ├─ Personalización de colores
+   │  ├─ Variables clave en el código
+   │  └─ Troubleshooting técnico
+   └─ Lee si necesitas modificar el código
+
+6. 📕 CORS_Y_ALTERNATIVAS.md [SI HAY PROBLEMAS]
+   ├─ Contenido: Soluciones para errores CORS
+   ├─ Incluye:
+   │  ├─ 4 soluciones diferentes (de fácil a compleja)
+   │  │  ├─ Solución 1: Proxy CORS (Fácil)
+   │  │  ├─ Solución 2: Google Sheets API (Media)
+   │  │  ├─ Solución 3: Python/Streamlit (Media)
+   │  │  └─ Solución 4: Chrome desde comando (Temporal)
+   │  ├─ Tabla comparativa de opciones
+   │  ├─ Debugging avanzado
+   │  └─ Recomendaciones finales
+   └─ Consulta si la app no carga datos
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🗺️  ESTRUCTURA DEL PROYECTO
+──────────────────────────
+
+App/
+├─ index.html .......................... ⭐ APLICACIÓN PRINCIPAL
+├─ app.py ............................. 🐍 ALTERNATIVA PYTHON
+├─ README.md .......................... 📘 GUÍA COMPLETA
+├─ INICIO_RAPIDO.txt .................. 📗 GUÍA RÁPIDA
+├─ CONFIG_AVANZADA.txt ................ 📙 CONFIGURACIÓN TÉCNICA
+├─ CORS_Y_ALTERNATIVAS.md ............. 📕 SOLUCIÓN DE PROBLEMAS
+└─ INDICE_ARCHIVOS.txt ................ 📄 ESTE ARCHIVO
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 FLUJO DE DECISIÓN - ¿QUÉ HACER?
+──────────────────────────────────
+
+┌─ ¿Quieres empezar YA?
+│  └─ Abre index.html directamente (haz doble clic)
+│
+├─ ¿Eres usuario no-técnico?
+│  └─ Lee INICIO_RAPIDO.txt (5 minutos)
+│
+├─ ¿Quieres entender todo?
+│  └─ Lee README.md (15 minutos)
+│
+├─ ¿Hay error de CORS?
+│  └─ Lee CORS_Y_ALTERNATIVAS.md (soluciones)
+│
+├─ ¿Necesitas personalizar la app?
+│  └─ Lee CONFIG_AVANZADA.txt (detalles técnicos)
+│
+└─ ¿Prefieres Python/Streamlit?
+   └─ Ejecuta: streamlit run app.py
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ CONFIGURACIÓN RÁPIDA EN 30 SEGUNDOS
+─────────────────────────────────────
+
+1. Abre index.html (doble clic)
+   ↓
+2. Espera a que cargue (deberías ver tarjetas)
+   ↓
+3. ¡Listo! Usa los filtros y disfruta
+
+Si ves error, lee CORS_Y_ALTERNATIVAS.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔗 INFORMACIÓN DEL GOOGLE SHEET
+───────────────────────────────
+
+URL: https://docs.google.com/spreadsheets/d/1pbgu_CAaeFcd06-E_DkgOihvCLTzAsM276bOu69rrxQ/
+Pestaña: "Bookings"
+Público: ✅ Debe estar público
+Columnas: A a N (15 columnas)
+
+Requisito: El Sheet debe estar compartido como "Cualquiera con enlace → Visualizador"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ CARACTERÍSTICAS IMPLEMENTADAS
+───────────────────────────────
+
+✅ Carga de datos en tiempo real desde Google Sheets
+✅ Filtros dinámicos (Lugar, Vehículo, Estado, Búsqueda)
+✅ Códigos de color por ubicación (Azul=Salta, Verde=Aeropuerto)
+✅ Alertas visuales por estado de próxima reserva
+✅ Barra de estadísticas (Urgentes, Advertencias, Pendientes, Disponibles)
+✅ Diseño responsivo (móvil, tablet, desktop)
+✅ Información clara en tarjetas (Miembro, Vehículo, Período, Estados)
+✅ Indicadores de feriados con tooltips
+✅ Ordenamiento automático por fecha de Pick up
+✅ Versión alternativa en Python/Streamlit
+✅ Documentación completa en español
+✅ Guías de troubleshooting
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 PREGUNTAS FRECUENTES
+──────────────────────
+
+P: ¿Cómo abrirlo?
+R: Haz doble clic en index.html (se abrirá en tu navegador predeterminado)
+
+P: ¿Necesito servidor?
+R: No, funciona localmente en tu navegador
+
+P: ¿Cómo actualizo los datos?
+R: Recarga la página (Ctrl+R). Automáticamente obtiene los últimos datos
+
+P: ¿Qué navegadores soporta?
+R: Chrome, Firefox, Edge, Safari (cualquier navegador moderno)
+
+P: ¿Es responsivo (funciona en móvil)?
+R: Sí, se adapta automáticamente a cualquier tamaño de pantalla
+
+P: ¿Debo instalar algo?
+R: No, excepto si usas la versión Python (requiere Python 3.7+)
+
+P: ¿Puedo modificar los colores?
+R: Sí, ve a CONFIG_AVANZADA.txt y busca la sección "PERSONALIZACIÓN DE COLORES"
+
+P: ¿Qué pasa si el Google Sheet cambia?
+R: Automáticamente se refleja en la siguiente recarga de la página
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 ¡LISTO PARA USAR!
+──────────────────
+
+Tu dashboard está completamente funcional y listo.
+
+Próximos pasos:
+1. Abre index.html
+2. Verifica que los datos se cargan
+3. Prueba los filtros
+4. ¡Disfruta! 
+
+Si tienes problemas:
+1. Recarga la página
+2. Abre la consola (F12)
+3. Lee la documentación correspondiente
+
+════════════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.0
+Actualizado: Marzo 2026
+Autor: Sistema de Gestión de Reservas
+Estado: ✅ Producción

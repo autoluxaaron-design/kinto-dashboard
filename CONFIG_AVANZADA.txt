@@ -1,0 +1,133 @@
+// ARCHIVO DE CONFIGURACIÓN AVANZADA
+// ====================================
+// Si necesitas cambiar la URL del Google Sheet, sigue estos pasos:
+
+// 1. OBTENER LA URL CSV CORRECTA DEL GOOGLE SHEET
+// ================================================
+
+// Opción A: URL de Exportación Directa (RECOMENDADA)
+// ├─ Reemplaza {ID} con el ID real de tu sheet
+// ├─ URL: https://docs.google.com/spreadsheets/d/{ID}/export?format=csv&gid={GID}
+// ├─ Ejemplo: https://docs.google.com/spreadsheets/d/1pbgu_CAaeFcd06-E_DkgOihvCLTzAsM276bOu69rrxQ/export?format=csv&gid=0
+// └─ El gid=0 es la primera pestaña ("Bookings")
+
+// Opción B: Desde Google Sheets (Si quieres obtener la URL manualmente)
+// ├─ 1. Abre tu Google Sheet
+// ├─ 2. Ve a Archivo → Descargar → CSV
+// ├─ 3. Copia el ID del sheet de la URL del navegador
+// ├─ 4. Construye la URL usando el patrón de arriba
+// └─ 5. Reemplaza en el archivo index.html
+
+// 2. ESTRUCTURA DEL CÓDIGO EN index.html
+// =======================================
+// Busca esta línea en el archivo index.html:
+/*
+const GOOGLE_SHEET_ID = '1pbgu_CAaeFcd06-E_DkgOihvCLTzAsM276bOu69rrxQ';
+const SHEET_GID = '0';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+*/
+
+// 3. PERSONALIZACIÓN DE COLUMNAS
+// ================================
+// Si tu estructura de datos es diferente, modifica el objeto COLUMNS:
+/*
+const COLUMNS = {
+    ID: 0,              // Índice 0 = Columna A
+    MEMBER: 1,          // Índice 1 = Columna B
+    VEHICLE: 2,         // Índice 2 = Columna C
+    LUGAR: 3,           // Índice 3 = Columna D
+    PICKUP_DATE: 4,     // Índice 4 = Columna E
+    PICKUP_TIME: 5,     // Índice 5 = Columna F
+    DROPOFF_DATE: 6,    // Índice 6 = Columna G
+    DROPOFF_TIME: 7,    // Índice 7 = Columna H
+    ENTREGA: 8,         // Índice 8 = Columna I
+    DEVOLUCION: 9,      // Índice 9 = Columna J
+    DIA_ENT: 10,        // Índice 10 = Columna K
+    DIA_DEV: 11,        // Índice 11 = Columna L
+    PROXIMA_RESERVA: 12 // Índice 12 = Columna M
+    FERIADO: 13         // Índice 13 = Columna N
+};
+*/
+
+// 4. PERSONALIZACIÓN DE COLORES
+// ==============================
+// Salta (Azul claro):      #4dd0e1 (border), #b3e5fc (background)
+// Aeropuerto (Verde claro): #81c784 (border), #c8e6c9 (background)
+// Urgente (Rojo):          #ef5350
+// Advertencia (Amarillo):   #ffd54f
+// Pendiente (Naranja):      #ffb74d
+// Disponible (Verde):       #81c784
+// Primary (Morado):         #667eea
+
+// 5. VALORES ESPERADOS EN EL GOOGLE SHEET
+// =======================================
+// Para que los filtros y colores funcionen, asegúrate que:
+
+// Lugar (Columna D):
+//   ├─ "Salta" (EXACTO)
+//   ├─ "Aeropuerto" (EXACTO)
+//   └─ Otros valores se mostrarán neutrales
+
+// Próxima Reserva (Columna M):
+//   ├─ "🚨 URGENTE" → Rojo + alerta
+//   ├─ "⚠️ 1 día" o similar → Amarillo
+//   ├─ "⏳ 2 días" o similar → Naranja
+//   ├─ "✅ Disponible" → Verde
+//   └─ Cualquier otro valor → Neutral
+
+// Feriado (Columna N):
+//   ├─ Si está vacío: no muestra nada
+//   ├─ Si tiene texto: muestra icono 🎉 con tooltip
+//   └─ Ejemplo: "FERIADO Pick up: Viernes Santo"
+
+// 6. TROUBLESHOOTING CSV
+// =====================
+// Si los datos no carga:
+
+// a) Verifica CORS
+//    ├─ Google Sheets debería permitir lectura desde cualquier origen
+//    └─ Si falla, considera usar:
+//       └─ Google Sheets API v4 (requiere API key)
+//       └─ o servidor proxy (más complejo)
+
+// b) Verifica que el Sheet sea público
+//    ├─ Abre el Sheet en navegador privado (sin autenticación)
+//    └─ Si pide login, cambia permisos a "Cualquiera"
+
+// c) Verifica la URL
+//    ├─ Abre la URL CSV directamente en el navegador
+//    └─ Debe descargar un archivo CSV
+//    └─ Si muestra error 404, revisa el ID
+
+// 7. ACTUALIZACIÓN AUTOMÁTICA
+// ===========================
+// Por defecto, los datos se cargan al abrir el archivo.
+// Para actualizaciones en tiempo real, descomenta esta línea
+// (busca en el código):
+/*
+// setInterval(loadBookings, 30000); // Actualiza cada 30 segundos
+*/
+
+// 8. BÚSQUEDA Y REFERENCIAS RÁPIDAS
+// ==================================
+// Busca en el código:
+//   "TODO:" para cambios pendientes
+//   "FIXME:" para cosas que pueden mejorarse
+//   "HACK:" para soluciones temporales
+//   "IMPORTANT:" para cosas críticas
+
+// 9. GLOSARIO DE VARIABLES CLAVE
+// ===============================
+// allBookings: Array con TODAS las reservas del Sheet
+// filteredBookings: Array con las reservas DESPUÉS de filtrar
+// vehicles: Array con modelos de vehiculos únicos
+// COLUMNS: Objeto que mapea nombres a índices de columnas
+// CSV_URL: URL desde donde se descargan los datos
+
+// 10. CONTACTO Y SOPORTE
+// ======================
+// Si necesitas ayuda:
+//   1. Abre la consola (F12 en Chrome/Firefox)
+//   2. Revisa los mensajes de error
+//   3. Verifica que los datos estén en el Sheet
+//   4. Prueba con otro navegador

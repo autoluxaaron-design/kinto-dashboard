@@ -1,0 +1,138 @@
+🚗 DASHBOARD DE RESERVAS - INICIO RÁPIDO
+======================================
+
+📂 ARCHIVOS CREADOS:
+├─ index.html ..................... Aplicación principal (ABRE ESTO)
+├─ README.md ....................... Instrucciones completas
+├─ CONFIG_AVANZADA.txt ............ Detalles técnicos y configuración
+├─ CORS_Y_ALTERNATIVAS.md ......... Soluciones si hay problemas
+└─ INICIO_RAPIDO.txt .............. Este archivo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ INICIO EN 3 PASOS:
+
+1️⃣  ABRE EL ARCHIVO
+    └─ Haz doble clic en "index.html"
+    └─ Se abrirá en tu navegador web
+
+2️⃣  ESPERA A QUE CARGUE
+    └─ Los datos se cargarán automáticamente desde Google Sheets
+    └─ Verás las tarjetas de reservas en 2-3 segundos
+
+3️⃣  ¡USA LOS FILTROS!
+    └─ Filtra por Lugar, Vehículo, Estado
+    └─ Busca miembros
+    └─ Haz clic en "Limpiar Filtros" para resetear
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 CARACTERÍSTICAS PRINCIPALES:
+
+✅ Colores por Lugar
+   🔵 Azul = Salta
+   🟢 Verde = Aeropuerto
+
+✅ Alertas de Próxima Reserva
+   🔴 Rojo = URGENTE
+   🟡 Amarillo = Advertencia
+   🟠 Naranja = Pendiente
+   🟢 Verde = Disponible
+
+✅ Información Completa en cada Tarjeta
+   - Miembro y Vehículo
+   - Período (Pick up → Drop off)
+   - Estados (Entrega, Devolución, Próxima Reserva)
+   - Feriados (si aplica)
+
+✅ Filtros Dinámicos
+   - Por Lugar
+   - Por Vehículo
+   - Por Estado de Próxima Reserva
+   - Por Miembro (búsqueda de texto)
+
+✅ Estadísticas en Tiempo Real
+   - Contador de URGENTES
+   - Contador de ADVERTENCIAS
+   - Contador de PENDIENTES
+   - Contador de DISPONIBLES
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️  CONFIGURACIÓN DEL GOOGLE SHEET:
+
+URL: https://docs.google.com/spreadsheets/d/1pbgu_CAaeFcd06-E_DkgOihvCLTzAsM276bOu69rrxQ/
+Pestaña (Sheet): "Bookings"
+Columnas: A a N
+
+IMPORTANTE: El Sheet debe ser público
+├─ Abre el Sheet
+├─ Botón "Compartir" en la esquina superior derecha
+├─ Selecciona "Cualquier persona con enlace"
+├─ Cambia a "Visualizador"
+└─ Copia el enlace compartido
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  SI HAY PROBLEMAS:
+
+❌ No aparecen datos
+   → Recarga la página (Ctrl+R)
+   → Abre la consola (F12) y busca errores en rojo
+   → Verifica que el Sheet sea público
+
+❌ Error "CORS"
+   → Lee el archivo "CORS_Y_ALTERNATIVAS.md"
+   → Hay 4 soluciones diferentes
+
+❌ Los colores no se ven
+   → Es normal, depende del lugar en el Sheet
+   → Verifica que diga "Salta" o "Aeropuerto" (exacto)
+
+❌ Los filtros no funcionan
+   → Asegúrate que los datos estén exactamente así:
+      ✅ "Salta" (no "salta" ni "SALTA")
+      ✅ "Aeropuerto" (no "aeropuerto")
+      ✅ "🚨 URGENTE" (incluir emoji)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 RESPONSIVO:
+
+La aplicación funciona perfectamente en:
+✅ Desktop / Laptop
+✅ Tablet
+✅ Móvil (se adapta automáticamente)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 ACTUALIZACIÓN DE DATOS:
+
+Los datos se actualizan cada vez que:
+- Recargas la página (Ctrl+R)
+- Cierras y abres el archivo nuevamente
+
+Para actualización automática cada 30 segundos:
+└─ Lee CONFIG_AVANZADA.txt (sección "ACTUALIZACIÓN AUTOMÁTICA")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 TECNOLOGÍA:
+
+HTML5 + CSS3 + JavaScript
+Sin dependencias de servidor
+Sin necesidad de instalar nada
+Funciona offline (una vez cargados los datos)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTACIÓN COMPLETA:
+
+Para más detalles, abre:
+├─ README.md (instrucciones en español)
+├─ CONFIG_AVANZADA.txt (configuración técnica)
+└─ CORS_Y_ALTERNATIVAS.md (problemas comunes y soluciones)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ ¡YA ESTÁ LISTO! SOLO ABRE index.html EN TU NAVEGADOR 🎉
