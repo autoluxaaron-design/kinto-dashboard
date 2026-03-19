@@ -1802,9 +1802,24 @@
             });
 
             filteredBookings.sort((a, b) => {
-                const timeA = a.pickupDate ? a.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
-                const timeB = b.pickupDate ? b.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
-                return timeA - timeB;
+                const now = new Date();
+                const aIsCurrent = a.pickupDate && a.pickupDate <= now && a.dropoffDate && a.dropoffDate > now;
+                const bIsCurrent = b.pickupDate && b.pickupDate <= now && b.dropoffDate && b.dropoffDate > now;
+                
+                if (aIsCurrent && !bIsCurrent) return -1; // Vigentes primero
+                if (!aIsCurrent && bIsCurrent) return 1;
+                
+                if (aIsCurrent && bIsCurrent) {
+                    // Ambos vigentes: ordenar por dropoff más cercano
+                    const dropA = a.dropoffDate ? a.dropoffDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    const dropB = b.dropoffDate ? b.dropoffDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    return dropA - dropB;
+                } else {
+                    // Ambos pendientes: ordenar por pickup más cercano
+                    const pickA = a.pickupDate ? a.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    const pickB = b.pickupDate ? b.pickupDate.getTime() : Number.MAX_SAFE_INTEGER;
+                    return pickA - pickB;
+                }
             });
 
             displayBookings();
